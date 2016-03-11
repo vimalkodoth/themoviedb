@@ -1,0 +1,76 @@
+#themoviedb_wrapper {
+	float:left;
+	width:820px;
+}
+#themoviedb_nav {
+	clear:both;
+}
+#themoviedb_nav ul{
+	list-style : none;
+	float:left;
+	padding:0;
+}
+#themoviedb_nav ul li{
+	float:left;
+	margin:5px 10px;
+	padding:5px;
+	border:1px solid #000;
+	background-color:#000;
+	color:#fff;
+}
+#themoviedb_nav ul li a{
+	color:#fff;
+	text-decoration:none;
+}
+#themoviedb_results {
+	clear:both;
+	padding:5px;
+	float:left;
+}
+#themoviedb_results > div > div:nth-child(n+3) {
+	box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    float: left;
+    margin: 0 0 20px 0;
+    width: 48%;
+    height:278px;
+}
+#themoviedb_results .themoviedb_image_content {
+	float:left;
+	padding:0 10px 0 0;
+}
+#themoviedb_results .themoviedb_image_content img{
+	display:block;
+}
+#themoviedb_results .themoviedb_overview {
+	padding-bottom:10px;
+	border-bottom:1px solid #eee;
+	padding-right:10px;
+	height:160px;
+	overflow:hidden;
+}
+#themoviedb_results .themoviedb_info p:first-child {
+	white-space:nowrap;
+	overflow: hidden;
+	text-overflow:ellipsis;
+}
+#themoviedb_results div.active .themoviedb_item .themoviedb_info p:first-child .focus{
+	color:red;
+	font-weight:bold;
+}
+#themoviedb_results .themoviedb_arrows {
+	border-bottom: 1px solid #eee;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: right;
+}
+#themoviedb_results .themoviedb_item:nth-child(2n+3){
+	float:left;
+}
+#themoviedb_results .themoviedb_item:nth-child(2n+4){
+	float:right;
+	margin-right:0;
+}
+#themoviedb_results h1{
+	border-bottom: 1px solid #eee;
+    padding-bottom: 7px;
+}

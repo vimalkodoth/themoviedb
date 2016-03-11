@@ -1,0 +1,33 @@
+<div id="themoviedb_wrapper">
+  <div id="themoviedb_nav">
+    <ul>
+      <li id="{{menuItem.id}}" ng-repeat="menuItem in menuList" ng-class="{active: currentTab.id === menuItem.id}" ng-click="selectTab(menuItem.id)"> <a href="#">{{ menuItem.name }}</a></li>
+    </ul>
+  </div>
+  <div id="themoviedb_results">
+    <div id="themoviedb_{{menuItem.id}}" ng-repeat="menuItem in menuList" ng-class="{active: currentTab.id === menuItem.id}" ng-show="currentTab.id === menuItem.id">
+      <h1 class="themoviedb_cat_name">{{ menuItem.name }}</h1>
+      <div class="themoviedb_arrows">
+        <span><a href="#" id="themoviedb_left" ng-click="theMovieDb.fetchPrev(menuItem.id,movieList[menuItem.id]['offset'])" >left</a> | </span>
+        <span><a href="#" id="themoviedb_right" ng-click="theMovieDb.fetchNext(menuItem.id,movieList[menuItem.id]['offset'])" >right</a></span>
+      </div>
+      <div class="themoviedb_item" ng-class="(($index+1) % 2) == 0 ? 'even':'odd'" ng-repeat="movie in movieList[menuItem.id]['data']" ng-keynav-content ng-keynav-header>
+          <div class="themoviedb_image_content">
+            <a href="{{'https://www.themoviedb.org/movie/'+movie['id']+'?language=en'}}">
+                <img src="{{'https://image.tmdb.org/t/p/w185/'+movie['poster_path']}}">
+            </a>
+          </div>
+          <div class="themoviedb_info">
+            <p>
+              <a title="{{movie.title}}" href="">{{movie.title}}</a>
+            </p>
+            <p class="themoviedb_meta">
+              <span class="themoviedb_genres">{{}}</span>
+            </p>
+            <p class="themoviedb_overview">{{movie.overview}}</p>
+            <p class="themoviedb_view_more"><a title="{{movie['title']}}" href="{{'https://www.themoviedb.org/movie/'+movie['id']+'?language=en'}}">More Info</a></p>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
