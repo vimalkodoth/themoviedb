@@ -1,0 +1,15 @@
+{
+  "name": "themoviedb",
+  "description": "",
+  "main": "Gruntfile.js",
+  "authors": [
+    "Vimal Madhavan <vimal.madhavan@ellucian.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/vimalkodoth/themoviedb",
+  "moduleType": [],
+  "dependencies": {
+    "angular": "~1.5.0",
+    "jquery": "~2.2.1"
+  }
+}
