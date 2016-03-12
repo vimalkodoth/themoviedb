@@ -35,7 +35,7 @@
                         return promise;
                     }
                 };
-            }
+            };
         })
         .directive('ngKeynavHeader', function ($timeout) {
             return {
@@ -124,7 +124,6 @@
                                         scope.domContentItems.tabItems.off('keydown');
                                         scope.theMovieDb.fetchNext(idTerm, scope.movieList[idTerm].offset).then(function(payload){
                                             scope.theMovieDb.storeList(idTerm, payload.data.results);
-                                            //domItems.tabItems.off('keydown');
                                             if (scope.$last === true) {
                                                 $timeout(function(){
                                                     scope.domContentItems.currentItem = scope.domContentItems.firstItem;
@@ -136,7 +135,7 @@
                                         scope.domContentItems.tabItems.off('keydown');
                                         scope.theMovieDb.fetchPrev(idTerm, scope.movieList[idTerm].offset).then(function(payload){
                                             if(payload){
-                                                scope.theMovieDb.storeList(idTerm, payload.data['results']);
+                                                scope.theMovieDb.storeList(idTerm, payload.data.results);
                                             }
                                             if (scope.$last === true) {
                                                 $timeout(function(){
