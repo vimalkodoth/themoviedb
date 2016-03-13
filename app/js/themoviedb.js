@@ -119,8 +119,8 @@
                         var idTerm = '',
                             switchTab = (function () {
                                 return function (dir) {
+                                    var idTerm = angular.element(scope.domContentItems.currentItem).parent().attr('id').slice(11);
                                     if (angular.element(scope.domContentItems.currentItem).hasClass('even') && (dir === 'right')) {
-                                        idTerm = angular.element(scope.domContentItems.currentItem).parent().attr('id').slice(11);
                                         scope.domContentItems.tabItems.off('keydown');
                                         scope.theMovieDb.fetchNext(idTerm, scope.movieList[idTerm].offset).then(function(payload){
                                             scope.theMovieDb.storeList(idTerm, payload.data.results);
@@ -130,8 +130,7 @@
                                                 });
                                             }
                                         });
-                                    } else if (angular.element(scope.domContentItems.currentItem).hasClass('odd') && (dir === 'left')) {
-                                        idTerm = angular.element(scope.domContentItems.currentItem).parent().attr('id').slice(11);
+                                    } else if (angular.element(scope.domContentItems.currentItem).hasClass('odd') && (dir === 'left') && (scope.movieList[idTerm].offset !== 1)) {
                                         scope.domContentItems.tabItems.off('keydown');
                                         scope.theMovieDb.fetchPrev(idTerm, scope.movieList[idTerm].offset).then(function(payload){
                                             if(payload){
