@@ -120,7 +120,9 @@
                             switchTab = (function () {
                                 return function (dir) {
                                     var idTerm = angular.element(scope.domContentItems.currentItem).parent().attr('id').slice(11);
-                                    if (angular.element(scope.domContentItems.currentItem).hasClass('even') && (dir === 'right')) {
+                                    if((scope.movieList[idTerm].offset == 1) && (dir === 'left') && (scope.domContentItems.currentItem === scope.domContentItems.firstItem)){
+
+                                    } else if (angular.element(scope.domContentItems.currentItem).hasClass('even') && (dir === 'right')) {
                                         scope.domContentItems.tabItems.off('keydown');
                                         scope.theMovieDb.fetchNext(idTerm, scope.movieList[idTerm].offset).then(function(payload){
                                             scope.theMovieDb.storeList(idTerm, payload.data.results);
