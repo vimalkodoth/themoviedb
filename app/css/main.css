@@ -18,6 +18,9 @@
 	background-color:#000;
 	color:#fff;
 }
+#themoviedb_nav .active {
+	color:#ff0000;
+}
 #themoviedb_nav ul li a{
 	color:#fff;
 	text-decoration:none;

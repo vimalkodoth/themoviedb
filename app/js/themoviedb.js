@@ -41,8 +41,10 @@
             return {
                 restrict: 'A',
                 link: function (scope, ele, attr) {
+                    console.log('hidheader');
                     var domItems;
                     scope.selectItemNav = function(domItems, dir){
+                        scope.domNavItems.item.removeClass('active');
                         if(dir === 'right'){
                             scope.domNavItems.currentItem = scope.domNavItems.currentItem.nextElementSibling;
                         } else if(dir === 'left'){
@@ -54,6 +56,7 @@
                         }
                         scope.domNavItems.currentItem_id = angular.element(scope.domNavItems.currentItem).attr('id');
                         scope.domNavItems.item = angular.element(scope.domNavItems.currentItem.querySelector('a'));
+                        scope.domNavItems.item.addClass('active');
                         scope.domNavItems.item.focus();
                     };
                     scope.keyboardNav = function () {
@@ -103,6 +106,7 @@
             return {
                 restrict: 'A',
                 link: function (scope, ele, attr) {
+                    console.log('hid');
                     scope.selectItemContent = function(domItems, dir){
                         domItems.item.removeClass('focus');
                         angular.element(domItems.currentItem).removeClass('focus');
@@ -120,10 +124,11 @@
                             switchTab = (function () {
                                 return function (dir) {
                                     var idTerm = angular.element(scope.domContentItems.currentItem).parent().attr('id').slice(11);
-                                    if((scope.movieList[idTerm].offset == 1) && (dir === 'left') && (scope.domContentItems.currentItem === scope.domContentItems.firstItem)){
-
+                                    if((scope.movieList[idTerm].offset == 1) && (dir === 'up') && (scope.domContentItems.currentItem === scope.domContentItems.firstItem)){
+                                        scope.domNavItems.item.focus();
                                     } else if (angular.element(scope.domContentItems.currentItem).hasClass('even') && (dir === 'right')) {
                                         scope.domContentItems.tabItems.off('keydown');
+                                        scope.domNavItems.tabItems.off('keydown');
                                         scope.theMovieDb.fetchNext(idTerm, scope.movieList[idTerm].offset).then(function(payload){
                                             scope.theMovieDb.storeList(idTerm, payload.data.results);
                                             if (scope.$last === true) {
@@ -134,6 +139,7 @@
                                         });
                                     } else if (angular.element(scope.domContentItems.currentItem).hasClass('odd') && (dir === 'left') && (scope.movieList[idTerm].offset !== 1)) {
                                         scope.domContentItems.tabItems.off('keydown');
+                                        scope.domNavItems.tabItems.off('keydown');
                                         scope.theMovieDb.fetchPrev(idTerm, scope.movieList[idTerm].offset).then(function(payload){
                                             if(payload){
                                                 scope.theMovieDb.storeList(idTerm, payload.data.results);
@@ -178,6 +184,7 @@
                         scope.domContentItems.item[0].focus();
                     };
                     if (scope.$last === true) {
+                        console.log('yes');
                         scope.intializeContentDom();
                         scope.domContentItems.tabItems.off('keydown');
                         $timeout(scope.keynavContent);
@@ -185,7 +192,7 @@
                 }
             };
         })
-        .directive('theMovieDb', function ($q) {
+        .directive('theMovieDb', function ($q, $timeout) {
             return {
                 restrict: 'E',
                 scope: {
@@ -243,9 +250,22 @@
                     }
                     scope.selectTab = function(tabId) {
                         scope.currentTab.id = tabId;
-                        scope.theMovieDb.fetchList(tabId, 1);
-                        scope.domContentItems.currentItem = scope.domContentItems.firstItem;
+                        scope.domNavItems.tabItems.off('keydown');
+                        scope.theMovieDb.fetchList(tabId, 1).then(function(payload){
+                            $timeout(function(){
+                                scope.resetContentDom();
+                            });
+                        });
                     };
+                    scope.resetContentDom = function(){
+                        scope.domContentItems.items = scope.domContentItems.tabItems[0].querySelectorAll('.active .themoviedb_item');
+                        scope.domContentItems.firstItem = scope.domContentItems.items[0];
+                        scope.domContentItems.currentItem = scope.domContentItems.firstItem;
+                        scope.domContentItems.lastItem = scope.domContentItems.items[scope.domContentItems.items.length-1];
+                        scope.domContentItems.item = angular.element(scope.domContentItems.currentItem.querySelector('.themoviedb_info a'));
+                        scope.domContentItems.item.addClass('focus');
+                        scope.domContentItems.item[0].focus();
+                    }
                     scope.initializeNavDom = function(){
                         scope.domNavItems = {
                             'tabItems':elem.find('#themoviedb_wrapper ul')
@@ -254,19 +274,14 @@
                         scope.domNavItems.lastItem = scope.domNavItems.tabItems[0].lastElementChild;
                         scope.domNavItems.currentItem = scope.domNavItems.tabItems[0].querySelector('li.active');
                         scope.domNavItems.currentItem_id = angular.element(scope.domNavItems.currentItem).attr('id');
-                        scope.domNavItems.item = {};
+                        scope.domNavItems.item = angular.element(scope.domNavItems.currentItem.querySelector('a'));
+                        scope.domNavItems.item.addClass('active');
                     };
                     scope.intializeContentDom = function(){
                         scope.domContentItems = {
                             'tabItems' : elem.find('#themoviedb_results')
                         };
-                        scope.domContentItems.items = scope.domContentItems.tabItems[0].querySelectorAll('.active .themoviedb_item');
-                        scope.domContentItems.firstItem = scope.domContentItems.items[0];
-                        scope.domContentItems.currentItem = scope.domContentItems.firstItem;
-                        scope.domContentItems.lastItem = scope.domContentItems.items[scope.domContentItems.items.length-1];
-                        scope.domContentItems.item = angular.element(scope.domContentItems.currentItem.querySelector('.themoviedb_info a'));
-                        scope.domContentItems.item.addClass('focus');
-                        scope.domContentItems.item[0].focus();
+                        scope.resetContentDom();
                     };
                 },
             };
