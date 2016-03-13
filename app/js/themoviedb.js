@@ -280,7 +280,7 @@
                         scope.domContentItems.item = angular.element(scope.domContentItems.currentItem.querySelector('.themoviedb_info a'));
                         scope.domContentItems.item.addClass('focus');
                         scope.domContentItems.item[0].focus();
-                    }
+                    };
                     scope.initializeNavDom = function(){
                         scope.domNavItems = {
                             'tabItems':elem.find('#themoviedb_wrapper ul')
