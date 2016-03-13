@@ -266,11 +266,11 @@
                         scope.movieList[scope.menuList[menu].id].offset = 1; 
                         if(scope.menuList[menu].active) {
                             scope.currentTab = scope.menuList[menu];
-                            scope.theMovieDb.fetchList(scope.currentTab.id, 1).then(function(){
-                                scope.initializeNavDom();
-                            });
                         }
                     }
+                    scope.theMovieDb.fetchList(scope.currentTab.id, 1).then(function(payload){
+                        scope.initializeNavDom();
+                    });
                     scope.selectTab = function(menuItem) {
                         var index;
                         index = scope.menuList.indexOf(scope.currentTab);
@@ -302,7 +302,7 @@
                         scope.domNavItems.currentItem_id = angular.element(scope.domNavItems.currentItem).attr('id');
                         scope.domNavItems.item = angular.element(scope.domNavItems.currentItem.querySelector('a'));
                         scope.domNavItems.item.addClass('active');
-                    }
+                    };
                     scope.initializeNavDom = function(){
                         scope.domNavItems = {
                             'tabItems':elem.find('#themoviedb_wrapper ul')
