@@ -1,7 +1,7 @@
 <div id="themoviedb_wrapper">
   <div id="themoviedb_nav">
     <ul>
-      <li id="{{menuItem.id}}" ng-repeat="menuItem in menuList" ng-class="{active: currentTab.id === menuItem.id}" ng-click="selectTab(menuItem.id)"> <a href="#">{{ menuItem.name }}</a></li>
+      <li id="{{menuItem.id}}" ng-repeat="menuItem in menuList" ng-class="{active: currentTab.id === menuItem.id}" ng-click="selectTab(menuItem)"> <a href="#">{{ menuItem.name }}</a></li>
     </ul>
   </div>
   <div id="themoviedb_results">

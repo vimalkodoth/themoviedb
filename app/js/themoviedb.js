@@ -69,6 +69,9 @@
                                         scope.selectItemNav(scope.domNavItems,'right');
                                     } else if (dir === 'left') {
                                         scope.selectItemNav(scope.domNavItems,'left');
+                                    } else if (dir === 'down') {
+                                        angular.element(scope.domContentItems.item[0]).addClass('focus');
+                                        scope.domContentItems.item[0].focus();
                                     }
                                     /* remove this comment to load the content dynamically using arrow keys without hitting enter to load 
                                     scope.$apply(function () {
@@ -79,14 +82,19 @@
                         }());
                         scope.keydownEventHandler = function (event) {
                             var keyCode = event.keyCode || event.which || event.originalEvent.keyCode;
-                            if (keyCode === 39 || keyCode === 40) { // down arrow or right arrow
+                            if (keyCode === 39) { // right arrow
                                 switchTab('right');
                                 return false;
                             }
-                            if (keyCode === 37 || keyCode === 38) { // top arrow or left arrow
+                            if (keyCode === 40) { // down arrow
+                                switchTab('down');
+                                return false;
+                            }
+                            if (keyCode === 37) { // top arrow or left arrow
                                 switchTab('left');
                                 return false;
                             }
+
                             if (keyCode === 13) {
 
                             }
@@ -95,7 +103,7 @@
                         scope.domNavItems.tabItems.on('keydown', scope.keydownEventHandler);
                     };
                     if (scope.$last === true) {
-                        scope.initializeNavDom();
+                        scope.domNavItems.tabItems.off('keydown');
                         $timeout(scope.keyboardNav);
                     }
                 }
@@ -123,7 +131,6 @@
                         }
                         domItems.item = angular.element(domItems.currentItem.querySelector('.themoviedb_info a'));
                         domItems.item.addClass('focus');
-
                         domItems.item.focus();
                     };
                     scope.keynavContent = function () {
@@ -131,7 +138,8 @@
                             switchTab = (function () {
                                 return function (dir) {
                                     var idTerm = angular.element(scope.domContentItems.currentItem).parent().attr('id').slice(11);
-                                    if((scope.movieList[idTerm].offset == 1) && (dir === 'up') && (scope.domContentItems.currentItem === scope.domContentItems.firstItem)){
+                                    if((dir === 'up') && (scope.domContentItems.currentItem === scope.domContentItems.firstItem || (scope.domContentItems.currentItem == scope.domContentItems.firstEvenItem))){
+                                        scope.domContentItems.item.removeClass('focus');
                                         scope.domNavItems.item.focus();
                                     } else if (angular.element(scope.domContentItems.currentItem).hasClass('even') && (dir === 'right')) {
                                         scope.domContentItems.tabItems.off('keydown');
@@ -140,7 +148,7 @@
                                             scope.theMovieDb.storeList(idTerm, payload.data.results);
                                             if (scope.$last === true) {
                                                 $timeout(function(){
-                                                    scope.domContentItems.currentItem = scope.domContentItems.firstItem;
+                                                    scope.resetContentDom();
                                                 });
                                             }
                                         });
@@ -153,7 +161,7 @@
                                             }
                                             if (scope.$last === true) {
                                                 $timeout(function(){
-                                                    scope.domContentItems.currentItem = scope.domContentItems.firstItem;
+                                                    scope.resetContentDom();
                                                 });
                                             }
                                         });
@@ -257,14 +265,20 @@
                         scope.movieList[scope.menuList[menu].id] = {};
                         scope.movieList[scope.menuList[menu].id].offset = 1; 
                         if(scope.menuList[menu].active) {
-                            scope.currentTab.id = scope.menuList[menu].id;
-                            scope.theMovieDb.fetchList(scope.currentTab.id, 1);
+                            scope.currentTab = scope.menuList[menu];
+                            scope.theMovieDb.fetchList(scope.currentTab.id, 1).then(function(){
+                                scope.initializeNavDom();
+                            });
                         }
                     }
-                    scope.selectTab = function(tabId) {
-                        scope.currentTab.id = tabId;
-                        scope.domNavItems.tabItems.off('keydown');
-                        scope.theMovieDb.fetchList(tabId, 1).then(function(payload){
+                    scope.selectTab = function(menuItem) {
+                        var index;
+                        index = scope.menuList.indexOf(scope.currentTab);
+                        scope.menuList[index].active = false;
+                        index = scope.menuList.indexOf(menuItem);
+                        scope.menuList[index].active = true;
+                        scope.currentTab = menuItem;
+                        scope.theMovieDb.fetchList(scope.currentTab.id, 1).then(function(payload){
                             $timeout(function(){
                                 scope.resetContentDom();
                             });
@@ -281,16 +295,19 @@
                         scope.domContentItems.item.addClass('focus');
                         scope.domContentItems.item[0].focus();
                     };
-                    scope.initializeNavDom = function(){
-                        scope.domNavItems = {
-                            'tabItems':elem.find('#themoviedb_wrapper ul')
-                        };
+                    scope.resetNavDom = function(){
                         scope.domNavItems.firstItem = scope.domNavItems.tabItems[0].firstElementChild;
                         scope.domNavItems.lastItem = scope.domNavItems.tabItems[0].lastElementChild;
                         scope.domNavItems.currentItem = scope.domNavItems.tabItems[0].querySelector('li.active');
                         scope.domNavItems.currentItem_id = angular.element(scope.domNavItems.currentItem).attr('id');
                         scope.domNavItems.item = angular.element(scope.domNavItems.currentItem.querySelector('a'));
                         scope.domNavItems.item.addClass('active');
+                    }
+                    scope.initializeNavDom = function(){
+                        scope.domNavItems = {
+                            'tabItems':elem.find('#themoviedb_wrapper ul')
+                        };
+                        scope.resetNavDom();
                     };
                     scope.intializeContentDom = function(){
                         scope.domContentItems = {
