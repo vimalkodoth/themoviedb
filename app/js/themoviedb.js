@@ -149,6 +149,7 @@
                                             if (scope.$last === true) {
                                                 $timeout(function(){
                                                     scope.resetContentDom();
+                                                    scope.animateSlide('right');
                                                 });
                                             }
                                         });
@@ -162,6 +163,7 @@
                                             if (scope.$last === true) {
                                                 $timeout(function(){
                                                     scope.resetContentDom();
+                                                    scope.animateSlide('left');
                                                 });
                                             }
                                         });
@@ -284,6 +286,14 @@
                             });
                         });
                     };
+                    scope.animateSlide = function(dir){
+                        var ele = angular.element(scope.domContentItems.items);
+                        if(dir === 'left'){
+                            ele.addClass('slideleft');
+                        } else if(dir === 'right') {
+                            ele.addClass('slideright');
+                        }
+                    }
                     scope.resetContentDom = function(){
                         scope.domContentItems.items = scope.domContentItems.tabItems[0].querySelectorAll('.active .themoviedb_item');
                         scope.domContentItems.firstItem = scope.domContentItems.items[0];
