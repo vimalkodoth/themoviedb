@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 		connect: {
 			example: {
 				port: 1337,
-				base: 'app'
+				base: ''
 			}
 		},
     jshint: {
