@@ -293,7 +293,7 @@
                         } else if(dir === 'right') {
                             ele.addClass('slideright');
                         }
-                    }
+                    };
                     scope.resetContentDom = function(){
                         scope.domContentItems.items = scope.domContentItems.tabItems[0].querySelectorAll('.active .themoviedb_item');
                         scope.domContentItems.firstItem = scope.domContentItems.items[0];
